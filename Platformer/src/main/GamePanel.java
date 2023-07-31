@@ -27,7 +27,7 @@ public class GamePanel extends JPanel{
 		addKeyListener( new KeyboardInputs(this));
 		addMouseListener(mouseInputs);
 		addMouseMotionListener(mouseInputs);
-		random =  new Random();
+		random = new Random();
 	}
 	
 	public void changeXDelta(int value) {
@@ -59,15 +59,9 @@ public class GamePanel extends JPanel{
 		//x position, y position, width, height
 		// xDelta and yDelta dynamically change the rectangle's position based on keyboard inputs
 		g.fillRect((int) xDelta, (int) yDelta, 200, 50);
-		frames++;
-		if(System.currentTimeMillis() - lastCheck >= 1000) {
-			lastCheck = System.currentTimeMillis();
-			System.out.println("FPS: " + frames);
-			frames = 0;
-		}
-		// repaint calls paintComponent so it creates a recursive loop
-		repaint();
+		
 	}
+	
 	private void updateRectangle() {
 		//reverse the x or y directions when the rectangle reaches the x or y axis limit
 		xDelta += xDir;
@@ -90,6 +84,6 @@ public class GamePanel extends JPanel{
 		int b = random.nextInt(255);
 		
 		return new Color(r, g, b);
-		//TODO ended video 3 at 14:30
+		
 	}
 }
