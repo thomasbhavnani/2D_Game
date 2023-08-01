@@ -1,12 +1,9 @@
 package entities;
 
-import static utilz.Constants.Directions.DOWN;
-import static utilz.Constants.Directions.LEFT;
-import static utilz.Constants.Directions.RIGHT;
-import static utilz.Constants.Directions.UP;
+
 import static utilz.Constants.PlayerConstants.GetSpriteAmount;
-import static utilz.Constants.PlayerConstants.IDLE;
-import static utilz.Constants.PlayerConstants.RUNNING;
+import static utilz.Constants.PlayerConstants.*;
+
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -22,7 +19,7 @@ public class Player extends Entity{
 	private int playerAction = IDLE;
 	// set direction as -1 if player is not moving
 	private int playerDir = -1;
-	private boolean moving = false;
+	private boolean moving = false, attacking = false;
 	private boolean left, up, right, down;
 	private float playerSpeed = 2.0f;
 	
@@ -58,18 +55,36 @@ public class Player extends Entity{
 			// loop back through the images in the animation
 			if(aniIndex >= GetSpriteAmount(playerAction)) {
 				aniIndex = 0;
+				// don't want the attack animation on a constant loop like running?
+				attacking = false;
 			}
+			
 		}
 		
 	}
 	
 	private void setAnimation() {
-		if(moving) 
+		
+		int startAni = playerAction;
+		if (moving) 
 			playerAction = RUNNING;
 		else
 			playerAction = IDLE;
+		if (attacking) 
+			playerAction = ATTACK_1;
+		// checking for a change in player animation
+		if (startAni != playerAction) {
+			// if there was a change in animation
+			// then reset animation counter and animation frame index to 0
+			resetAniTick();
+		}
 	}
 	
+	private void resetAniTick() {
+		aniTick = 0;
+		aniIndex = 0;
+	}
+
 	private void updatePos() {
 		
 		moving = false;
@@ -123,6 +138,10 @@ public class Player extends Entity{
 		left = false;
 		down = false;
 		right = false;
+	}
+	
+	public void setAttacking(boolean attacking) {
+		this.attacking = attacking;
 	}
 
 	public boolean isLeft() {
