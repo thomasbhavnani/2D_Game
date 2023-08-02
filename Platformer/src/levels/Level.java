@@ -12,5 +12,9 @@ public class Level {
 		// select row for the y index, then select a column for the x index
 		return lvlData[y][x]; 
 	}
+	
+	public int[][] getLevelData(){
+		return lvlData;
+	}
 
 }
