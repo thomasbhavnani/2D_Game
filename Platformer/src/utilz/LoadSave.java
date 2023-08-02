@@ -13,6 +13,7 @@ public class LoadSave {
 	public static final String PLAYER_ATLAS = "player_sprites.png";
 	public static final String LEVEL_ATLAS = "outside_sprites.png";
 	public static final String LEVEL_ONE_DATA = "level_one_data.png";
+	public static final String MENU_BUTTONS = "button_atlas.png";
 	// we only have static methods so we do not have to 
 	// create an object of this class to access any methods 
 	
@@ -60,7 +61,7 @@ public class LoadSave {
 				// but somehow only gets 48 unique values for the 48 tiles in the game window?
 				// how are j and i being used to iterate through pixels but also don't exceed the bounds
 				// of the lvlData array which is only 4 rows 12 columns???
-				// ok whatever, fuck this
+				
 				lvlData[j][i] = value;
 			}
 		}
