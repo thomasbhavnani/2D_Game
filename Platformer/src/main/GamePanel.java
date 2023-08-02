@@ -2,18 +2,14 @@ package main;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
-
+import static main.Game.GAME_WIDTH;
+import static main.Game.GAME_HEIGHT;
 // get all the different player actions and methods in the utilz package
-import static utilz.Constants.PlayerConstants.*;
-import static utilz.Constants.Directions.*;
+
 
 public class GamePanel extends JPanel{
 	// MouseInputs implements both MouseListener and MouseMotionListener
@@ -37,10 +33,10 @@ public class GamePanel extends JPanel{
 	
 	//set panel size not the window size so it does not include the border
 	private void setPanelSize() {
-		Dimension size = new Dimension(1280, 800);
-		setMinimumSize(size);
+		Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
 		setPreferredSize(size);
-		setMaximumSize(size);
+		System.out.println("size: " + GAME_WIDTH + " : " + GAME_HEIGHT);
+		
 	}
 
 
