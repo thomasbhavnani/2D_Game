@@ -18,7 +18,15 @@ public class MouseInputs implements MouseListener, MouseMotionListener{
 	}
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
+		switch(Gamestate.state) {
+		case PLAYING:
+			// register a mouse click in the play state 
+			gamePanel.getGame().getPlaying().mouseDragged(e);
+			break;
+		default:
+			break;
+		
+		}
 		
 	}
 

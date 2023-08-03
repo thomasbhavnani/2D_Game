@@ -22,8 +22,10 @@ public class HelpMethods {
 	// check that the position is a tile but also that the position is inside the game window
 	private static boolean IsSolid(float x, float y, int[][] lvlData) {
 		
-		// if player reaches x or y border, it can't move past
-		if (x < 0 || x >= Game.GAME_WIDTH) 
+		// max width of entire level
+		int maxWidth = lvlData[0].length * Game.TILES_SIZE;
+		
+		if (x < 0 || x >= maxWidth) 
 			return true;
 		if (y < 0 || y >= Game.GAME_HEIGHT) 
 			return true;
