@@ -24,17 +24,25 @@ public class MouseInputs implements MouseListener, MouseMotionListener{
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		switch(Gamestate.state) {
+		case MENU:
+			// register a mouse click in the menu state
+			gamePanel.getGame().getMenu().mouseMoved(e);
+			break;
+		case PLAYING:
+			// register a mouse click in the play state 
+			gamePanel.getGame().getPlaying().mouseMoved(e);
+			break;
+		default:
+			break;
 		
+		}
 		
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		switch(Gamestate.state) {
-		case MENU:
-			// register a mouse click in the menu state
-			gamePanel.getGame().getMenu().mouseClicked(e);
-			break;
 		case PLAYING:
 			// register a mouse click in the play state 
 			gamePanel.getGame().getPlaying().mouseClicked(e);
@@ -47,13 +55,37 @@ public class MouseInputs implements MouseListener, MouseMotionListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		switch(Gamestate.state) {
+		case MENU:
+			// register a mouse click in the menu state
+			gamePanel.getGame().getMenu().mousePressed(e);
+			break;
+		case PLAYING:
+			// register a mouse click in the play state 
+			gamePanel.getGame().getPlaying().mousePressed(e);
+			break;
+		default:
+			break;
+		
+		}
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		switch(Gamestate.state) {
+		case MENU:
+			// register a mouse click in the menu state
+			gamePanel.getGame().getMenu().mouseReleased(e);
+			break;
+		case PLAYING:
+			// register a mouse click in the play state 
+			gamePanel.getGame().getPlaying().mouseReleased(e);
+			break;
+		default:
+			break;
+		
+		}
 		
 	}
 
