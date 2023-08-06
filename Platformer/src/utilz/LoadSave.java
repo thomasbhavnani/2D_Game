@@ -22,8 +22,13 @@ public class LoadSave {
 	public static final String VOLUME_BUTTONS = "volume_buttons.png";
 	// this is for the big background image that goes behind the menu itself and takes up the full game window
 	public static final String MENU_BACKGROUND_IMG = "background_menu.png";
+	public static final String PLAYING_BG_IMG = "playing_bg_img.png";
+	public static final String BIG_CLOUDS = "big_clouds.png";
+	public static final String SMALL_CLOUDS = "small_clouds.png";
+	
 	// we only have static methods so we do not have to 
 	// create an object of this class to access any methods 
+	
 	
 	// use this method to get any sprite assets
 	// (i think an atlas is the grid of all the different sprites used in that asset)
