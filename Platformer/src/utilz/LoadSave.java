@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import entities.Crabby;
+import static utilz.Constants.EnemyConstants.CRABBY;
 import main.Game;
 
 public class LoadSave {
@@ -25,6 +28,7 @@ public class LoadSave {
 	public static final String PLAYING_BG_IMG = "playing_bg_img.png";
 	public static final String BIG_CLOUDS = "big_clouds.png";
 	public static final String SMALL_CLOUDS = "small_clouds.png";
+	public static final String CRABBY_SPRITE = "crabby_sprite.png";
 	
 	// we only have static methods so we do not have to 
 	// create an object of this class to access any methods 
@@ -52,6 +56,27 @@ public class LoadSave {
 		
 		return img;
 	}
+	
+	
+	// using the green color of the RGB values encoded into the level data to spawn enemies
+	public static ArrayList<Crabby> GetCrabs(){
+		BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
+		ArrayList<Crabby> list = new ArrayList<>();
+		
+		for(int j = 0; j < img.getHeight(); j++)  
+			for(int i = 0; i < img.getWidth(); i++) {
+				Color color = new Color(img.getRGB(i, j)); 
+				int value = color.getGreen();
+				
+				// if the green value == CRABBY (which is 0)
+				// put a Crab at this location in the level and store that location data in the Crab array
+				if(value == CRABBY) 
+					list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+			}
+		
+		return list;
+	}
+	
 	// size of array matches size of game window in terms of tiles of width and height
 	public static int[][] GetLevelData(){
 		
@@ -77,6 +102,7 @@ public class LoadSave {
 				// but somehow only gets 48 unique values for the 48 tiles in the game window?
 				// how are j and i being used to iterate through pixels but also don't exceed the bounds
 				// of the lvlData array which is only 4 rows 12 columns???
+				
 				// wait it actually makes sense, i think the level data is organized into 4x12 pixel PNG's 
 				// so the data is encoded into it
 				
