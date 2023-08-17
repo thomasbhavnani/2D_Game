@@ -32,17 +32,24 @@ public class HelpMethods {
 		
 		float xIndex = x / Game.TILES_SIZE;
 		float yIndex = y / Game.TILES_SIZE;
+		
+		return IsTileSolid((int) xIndex, (int) yIndex, lvlData);
 
+
+	}
+	
+	public static boolean IsTileSolid(int xTile, int yTile, int[][] lvlData) {
 		// can't pass floats into lvlData which is an integer array
 		// determines which tile in the lvlData array you are on
 		// note: can be a little janky because of the integer rounding of the float location values, 
 		// makes you collide with things when it doesn't look like you should
-		int value = lvlData[(int) yIndex][(int) xIndex];
+		int value = lvlData[yTile][xTile];
 		
 		// we only have 48 sprites so greater than 48 is no tile at all
+		// cannot have sprite tile < 0 so it should be solid
 		// should not be able to pass through any of these sprite tiles
 		// checking if the location of the player is a tile
-		// if the sprite is not transparent (sprite 11) than you cannot move through it and it is solid
+		// if the sprite is not transparent sprite 11 than you cannot move through it and it is solid
 		if(value >= 48 || value < 0 || value != 11) 
 			return true;
 		
@@ -95,4 +102,40 @@ public class HelpMethods {
 	public static boolean IsFloor(Rectangle2D.Float hitbox, float xSpeed, int[][] lvlData) {
 		return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
 	}
+	
+	// check if all the tiles between start and end along a horizontal line are solid tiles
+	public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
+		for (int i = 0; i < xEnd - xStart; i++) {
+			// check the tiles between the enemy and the player
+			if (IsTileSolid(xStart + i, y, lvlData))
+				return false;
+			
+			// check the if the tile underneath the tile being checked is not solid,
+			// if it is not solid then it is a pit and the enemy cannot move there
+			if (!IsTileSolid(xStart + i, y + 1, lvlData))
+				return false;
+		}
+
+		return true;
+	}
+	
+	// can use this method for multiple different classes other than entities so put it in the HelpMethods
+	public static boolean IsSightClear(int[][] lvlData, Rectangle2D.Float firstHitbox, 
+			Rectangle2D.Float secondHitbox, int yTile) {
+		// get the x tile location of the two hitboxes
+		int firstXTile = (int) (firstHitbox.x / Game.TILES_SIZE);
+		int secondXTile = (int) (secondHitbox.x / Game.TILES_SIZE);
+		
+		
+		// checking if there is a solid tile between the two hitboxes
+		if(firstXTile > secondXTile) 
+			// start from the larger x location
+			return IsAllTilesWalkable(secondXTile, firstXTile, yTile, lvlData);
+		 else 
+			return IsAllTilesWalkable(firstXTile, secondXTile, yTile, lvlData);	
+
+	}
+	
+	
+	
 }
