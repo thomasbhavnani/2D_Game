@@ -28,11 +28,12 @@ public class EnemyManager {
 		
 	}
 
-	public void update() {
+	public void update(int[][] lvlData) {
 		// update all the crab enemies
 		// uses the update method found in Enemy.java
 		for(Crabby c : crabbies)
-			c.update();
+			// enemies have access to the level data so they know where to patrol and don't fall off edges
+			c.update(lvlData);
 	}
 	
 	public void draw(Graphics g, int xLvlOffset) {
@@ -41,7 +42,7 @@ public class EnemyManager {
 	
 	private void drawCrabs(Graphics g, int xLvlOffset) {
 		for(Crabby c : crabbies)
-			g.drawImage(crabbyArr[c.getEnemyState()][c.getAniIndex()], (int) c.getHitbox().x - xLvlOffset, (int) c.getHitbox().y, CRABBY_WIDTH, CRABBY_HEIGHT, null);
+			g.drawImage(crabbyArr[c.getEnemyState()][c.getAniIndex()], (int) c.getHitbox().x - xLvlOffset, (int) c.getHitbox().y - CRABBY_DRAWOFFSET_Y, CRABBY_WIDTH, CRABBY_HEIGHT, null);
 		
 	}
 

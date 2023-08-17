@@ -27,18 +27,18 @@ public abstract class Entity {
 		
 	}
 	
-	protected void drawHitbox(Graphics g) {
+	protected void drawHitbox(Graphics g, int xLvlOffset) {
 		// for debugging the hitbox
 		g.setColor(Color.PINK);
-		g.drawRect((int)hitbox.x, (int)hitbox.y,(int) hitbox.width, (int)hitbox.height);
+		g.drawRect((int)hitbox.x - xLvlOffset, (int)hitbox.y,(int) hitbox.width, (int)hitbox.height);
 		
 	}
 	
 	// protected because we only want whatever is extending entity to update hitbox
-//	protected void updateHitbox() {
-//		hitbox.x = (int) x; // x and y are being updated along with player movement because Player extends Entity
-//		hitbox.y = (int) y;	// player uses super(x, y, width, height) so rectangle position changes with player position
-//	}
+	protected void updateHitbox() {
+		hitbox.x = (int) x; // x and y are being updated along with player movement because Player extends Entity
+		hitbox.y = (int) y;	// player uses super(x, y, width, height) so rectangle position changes with player position
+	}
 	
 	public Rectangle2D.Float getHitbox() {
 		return hitbox;

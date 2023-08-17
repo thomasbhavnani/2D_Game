@@ -71,6 +71,8 @@ public class HelpMethods {
 		if(airSpeed > 0) {
 			// player is falling - touching floor
 			int tileYPos = currentTile * Game.TILES_SIZE;
+			
+			// distance between edge of sprite tile and hitbox in the y direction
 			int yOffset = (int) (Game.TILES_SIZE - hitbox.height);
 			return tileYPos + yOffset - 1;
 		} else {
@@ -80,12 +82,17 @@ public class HelpMethods {
 	}
 	
 	public static boolean IsEntityOnFloor(Rectangle2D.Float hitbox, int[][] lvlData) {
-		// Check the pixel below bottom left corner (which is why it is +1 for the one pixel below)
+		// Check the pixel below bottom left corner (which is why it is  hitbox.y + hitbox.height + 1 for the one pixel below)
 		if(!IsSolid(hitbox.x, hitbox.y + hitbox.height + 1, lvlData)) 
 			// check the pixel blow bottom right corner 
 			if(!IsSolid(hitbox.x + hitbox.width, hitbox.y + hitbox.height + 1, lvlData)) 
 				return false;
 			
 		return true;
+	}
+	
+	// check if entity is standing on a floor, checking if it walks to an edge
+	public static boolean IsFloor(Rectangle2D.Float hitbox, float xSpeed, int[][] lvlData) {
+		return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
 	}
 }
