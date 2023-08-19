@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -11,6 +12,7 @@ import entities.EnemyManager;
 import entities.Player;
 import levels.LevelManager;
 import main.Game;
+import ui.GameOverOverlay;
 import ui.PauseOverlay;
 import utilz.LoadSave;
 import static utilz.Constants.Environment.*;
@@ -20,6 +22,7 @@ public class Playing extends State implements Statemethods{
 	private LevelManager levelManager;
 	private EnemyManager enemyManager;
 	private PauseOverlay pauseOverlay;
+	private GameOverOverlay gameOverOverlay;
 	private boolean paused = false;
 	
 	// used to draw the level around the player moved left/right
@@ -37,6 +40,8 @@ public class Playing extends State implements Statemethods{
 	private BufferedImage backgroundImg, bigCloud, smallCloud;
 	private int[] smallCloudsPos;
 	private Random rnd = new Random();
+	
+	private boolean gameOver;
 	
 	public Playing(Game game) {
 		super(game);
@@ -59,9 +64,10 @@ public class Playing extends State implements Statemethods{
 	private void initClasses() {
 		levelManager = new LevelManager(game);
 		enemyManager = new EnemyManager(this); // requires the playing class as argument
-		player = new Player(200, 200, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE));
+		player = new Player(200, 200, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this);
 		player.loadLvlData(levelManager.getCurrentLevel().getLevelData());
 		pauseOverlay = new PauseOverlay(this);
+		gameOverOverlay = new GameOverOverlay(this);
 	}
 	
 	
@@ -134,6 +140,18 @@ public class Playing extends State implements Statemethods{
 			g.drawImage(smallCloud, SMALL_CLOUD_WIDTH * 4 * i - (int) (xLvlOffset * 0.7), smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
 		
 
+	}
+	
+	public void resetAll() {
+		
+	}
+	
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
+	}
+	
+	public void checkEnemyHit(Rectangle2D.Float attackBox) {
+		enemyManager.checkEnemyHit(attackBox);
 	}
 
 

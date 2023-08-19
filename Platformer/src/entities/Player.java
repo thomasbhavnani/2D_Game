@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
+import gamestates.Playing;
 import main.Game;
 import utilz.LoadSave;
 
@@ -58,9 +59,12 @@ public class Player extends Entity{
 	private int flipX = 0;
 	private int flipW = 1;
 	
+	private boolean attackChecked;
+	private Playing playing;
 	
-	public Player(float x, float y, int width, int height) {
+	public Player(float x, float y, int width, int height, Playing playing) {
 		super(x, y, width, height);
+		this.playing = playing;
 		loadAnimations();
 		initHitbox(x, y, (int) (20 * Game.SCALE), (int)(28 * Game.SCALE));
 		initAttackBox();
@@ -72,16 +76,32 @@ public class Player extends Entity{
 	}
 
 	public void update() {
+		if(currentHealth <= 0) {
+			playing.setGameOver(true);
+			return;
+		}
+			
 		
 		updateHealthBar();
 		updateAttackBox();
 		updatePos();
-	
+		if(attacking)
+			checkAttack();
 		updateAnimationTick();
 		setAnimation();
 		
 	}
 	
+	private void checkAttack() {
+		//attack activates at frame 2 of the player attack animation
+		if(attackChecked || aniIndex != 1)
+			return;
+		attackChecked = true;
+		playing.checkEnemyHit(attackBox);
+			
+		
+	}
+
 	private void updateAttackBox() {
 		if(right) {
 			attackBox.x = hitbox.x + hitbox.width + (int)(Game.SCALE * 10);
@@ -103,8 +123,8 @@ public class Player extends Entity{
 		g.drawImage(animations[playerAction][aniIndex], 
 				(int) (hitbox.x - xDrawOffset) - lvlOffset + flipX,
 				(int) (hitbox.y - yDrawOffset), 
-				width * flipW, height, null); // multiply the width by flipW to switch the direction the player sprite is moving
-		// ENDED HERE ON EPISODE 16 (THE FINALE) AT MINUTE 23 
+				width * flipW, height, null); // multiply the width by flipW (+- 1) to switch the direction the player sprite is moving
+	
 		// drawHitbox(g, lvlOffset);
 		
 		drawAttackBox(g, lvlOffset);
@@ -140,8 +160,10 @@ public class Player extends Entity{
 			// loop back through the images in the animation
 			if(aniIndex >= GetSpriteAmount(playerAction)) {
 				aniIndex = 0;
-				// don't want the attack animation on a constant loop like running?
+				// don't want the attack animation on a constant loop like running
 				attacking = false;
+				// always reset attack check to false
+				attackChecked = false;
 			}
 			
 		}
@@ -163,8 +185,16 @@ public class Player extends Entity{
 				playerAction = FALLING;
 			}
 		}
-		if (attacking) 
+		if (attacking) {
 			playerAction = ATTACK;
+			if(startAni != ATTACK) {
+				// want to start the attack animation from the active frame
+				
+				aniIndex = 1;
+				aniTick = 0;
+				return;
+			}
+		}
 		// checking for a change in player animation
 		if (startAni != playerAction) {
 			// if there was a change in animation
