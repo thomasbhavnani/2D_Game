@@ -138,6 +138,7 @@ public abstract class Enemy extends Entity{
 		if(attackBox.intersects(player.hitbox));
 			player.changeHealth(-GetEnemyDmg(enemyType));
 		attackChecked = true;
+		
 	}
 
 	// protected allows the Crabby class to use this method
@@ -150,24 +151,18 @@ public abstract class Enemy extends Entity{
 			if(aniIndex >= GetSpriteAmount(enemyType, enemyState)) {
 				aniIndex = 0;
 				
-				
-				
-				switch(enemyState) {
-				case ATTACK:
-					enemyState = IDLE;
-				case HIT:
-					enemyState = IDLE;
-				case DEAD:
-					active = false;
+
+				switch (enemyState) {
+			    case ATTACK:
+			    case HIT:
+			        enemyState = IDLE;
+			        break;
+			    case DEAD:
+			        active = false;
+			        break;
+			    default:
+			        // Handle other cases or do nothing if necessary.
 				}
-				if(enemyState == ATTACK)
-					// used to leave the attack animation
-					enemyState = IDLE;
-				else if(enemyState == HIT)
-					enemyState = IDLE;
-				else if(enemyState == DEAD)
-					active = false;
-					
 			}
 		}
 	}
@@ -181,6 +176,17 @@ public abstract class Enemy extends Entity{
 			walkDir = RIGHT;
 		else 
 			walkDir = LEFT;
+		
+	}
+	
+	public void resetEnemy() {
+		hitbox.x = x;
+		hitbox.y = y;
+		firstUpdate = true;
+		currentHealth = maxHealth;
+		newState(IDLE);
+		active = true;
+		fallSpeed = 0;
 		
 	}
 

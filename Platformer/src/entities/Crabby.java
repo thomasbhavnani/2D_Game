@@ -71,8 +71,9 @@ public class Crabby extends Enemy{
 			case ATTACK:
 			
 				if(aniIndex == 0)
-					// makes sure that attack is checked at the beginning of each attack
 					attackChecked = false;
+					// makes sure that attack is checked at the beginning of each attack
+					
 				if(aniIndex == 3 && !attackChecked)
 					checkEnemyHit(attackBox, player);
 				break;
@@ -102,5 +103,7 @@ public class Crabby extends Enemy{
 		else
 			return 1;
 	}
+
+
 
 }

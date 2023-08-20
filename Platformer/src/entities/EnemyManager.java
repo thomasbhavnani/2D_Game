@@ -51,7 +51,7 @@ public class EnemyManager {
 						CRABBY_WIDTH * c.flipW(), 
 						CRABBY_HEIGHT, null);
 	//			c.drawHitbox(g, xLvlOffset);
-				c.drawAttackBox(g, xLvlOffset);
+//				c.drawAttackBox(g, xLvlOffset);
 			}
 	}
 	
@@ -73,6 +73,13 @@ public class EnemyManager {
 		for(int j = 0; j < crabbyArr.length; j++)
 			for(int i = 0; i < crabbyArr[j].length; i++)
 				crabbyArr[j][i] = temp.getSubimage(i * CRABBY_WIDTH_DEFAULT, j * CRABBY_HEIGHT_DEFAULT, CRABBY_WIDTH_DEFAULT, CRABBY_HEIGHT_DEFAULT);
+		
+	}
+
+	public void resetAllEnemies() {
+		for(Crabby c : crabbies) {
+			c.resetEnemy();
+		}
 		
 	}
 }

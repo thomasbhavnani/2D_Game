@@ -76,6 +76,7 @@ public class Player extends Entity{
 	}
 
 	public void update() {
+		updateHealthBar();
 		if(currentHealth <= 0) {
 			playing.setGameOver(true);
 			return;
@@ -127,7 +128,7 @@ public class Player extends Entity{
 	
 		// drawHitbox(g, lvlOffset);
 		
-		drawAttackBox(g, lvlOffset);
+//		drawAttackBox(g, lvlOffset);
 		// no level offset needed for UI because it's always in the same spot on screen
 		drawUI(g);
 	}
@@ -372,6 +373,20 @@ public class Player extends Entity{
 	
 	public void setJump(boolean jump) {
 		this.jump = jump;
+	}
+
+	public void resetAll() {
+		resetDirBooleans();
+		inAir = false;
+		attacking = false;
+		moving = false;
+		playerAction = IDLE;
+		currentHealth = maxHealth;
+		hitbox.x = x;
+		hitbox.y = y;
+		
+		if(!IsEntityOnFloor(hitbox, lvlData)) 
+			inAir = true;
 	}
 	
 	
