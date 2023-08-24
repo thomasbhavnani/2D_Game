@@ -32,8 +32,8 @@ public class EnemyManager {
 	public void update(int[][] lvlData, Player player) {
 		// update all the crab enemies
 		// uses the update method found in Enemy.java
+		// enemies have access to the level data so they know where to patrol and don't fall off edges
 		for(Crabby c : crabbies)
-			// enemies have access to the level data so they know where to patrol and don't fall off edges
 			if(c.isActive())
 				c.update(lvlData, player);
 	}
@@ -51,19 +51,18 @@ public class EnemyManager {
 						CRABBY_WIDTH * c.flipW(), 
 						CRABBY_HEIGHT, null);
 	//			c.drawHitbox(g, xLvlOffset);
-//				c.drawAttackBox(g, xLvlOffset);
+				c.drawAttackBox(g, xLvlOffset);
 			}
 	}
 	
 	public void checkEnemyHit(Rectangle2D.Float attackBox) {
-		for(Crabby c : crabbies)
-			if(c.isActive())
-				if(attackBox.intersects(c.getHitbox())) {
+		for (Crabby c : crabbies)
+			if (c.isActive())
+				if (attackBox.intersects(c.getHitbox())) {
 					c.hurt(10);
 					return;
 				}
 	}
-	
 
 	private void loadEnemyImgs() {
 		crabbyArr = new BufferedImage[5][9];

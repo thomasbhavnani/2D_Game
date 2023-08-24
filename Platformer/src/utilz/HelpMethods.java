@@ -100,7 +100,11 @@ public class HelpMethods {
 	
 	// check if entity is standing on a floor, checking if it walks to an edge
 	public static boolean IsFloor(Rectangle2D.Float hitbox, float xSpeed, int[][] lvlData) {
-		return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
+		// if moving to the right
+		if(xSpeed > 0)
+			return IsSolid(hitbox.x + hitbox.width + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
+		else
+			return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
 	}
 	
 	// check if all the tiles between start and end along a horizontal line are solid tiles

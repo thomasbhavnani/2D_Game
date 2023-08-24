@@ -59,11 +59,14 @@ public class Crabby extends Enemy{
 				// enemy should be moving, not idle
 				newState(RUNNING);
 				break;
+				
 			case RUNNING:
-				if(canSeePlayer(lvlData, player)) 
+				// patrol towards player and attack if they are in range
+				if(canSeePlayer(lvlData, player)) {
 					turnTowardsPlayer(player);
-				if(isPlayerCloseForAttack(player))
-					newState(ATTACK);
+					if(isPlayerCloseForAttack(player))
+						newState(ATTACK);
+				}
 				move(lvlData);
 				break;
 				// check for attacks at frame 3 of the attack animation
@@ -74,8 +77,10 @@ public class Crabby extends Enemy{
 					attackChecked = false;
 					// makes sure that attack is checked at the beginning of each attack
 					
-				if(aniIndex == 3 && !attackChecked)
-					checkEnemyHit(attackBox, player);
+				if(aniIndex == 3 && !attackChecked) {
+					checkPlayerHit(attackBox, player);
+				}
+					
 				break;
 			case HIT:
 				break;

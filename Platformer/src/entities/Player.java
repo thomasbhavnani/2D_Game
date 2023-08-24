@@ -82,8 +82,6 @@ public class Player extends Entity{
 			return;
 		}
 			
-		
-		updateHealthBar();
 		updateAttackBox();
 		updatePos();
 		if(attacking)
@@ -126,7 +124,7 @@ public class Player extends Entity{
 				(int) (hitbox.y - yDrawOffset), 
 				width * flipW, height, null); // multiply the width by flipW (+- 1) to switch the direction the player sprite is moving
 	
-		// drawHitbox(g, lvlOffset);
+		 drawHitbox(g, lvlOffset);
 		
 //		drawAttackBox(g, lvlOffset);
 		// no level offset needed for UI because it's always in the same spot on screen
@@ -287,8 +285,8 @@ public class Player extends Entity{
 
 	private void updateXPos(float xSpeed) {
 		if(CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData )) {
-		hitbox.x += xSpeed;
-		}else {
+			hitbox.x += xSpeed;
+		} else {
 			//makes sure hitbox hits wall 
 			hitbox.x = GetEntityXPosNextToWall(hitbox, xSpeed);
 		}
@@ -300,7 +298,6 @@ public class Player extends Entity{
 		
 		if(currentHealth <= 0) {
 			currentHealth = 0;
-			//gameOver();
 		} else if(currentHealth >= maxHealth)
 			currentHealth = maxHealth;
 	}
@@ -380,6 +377,7 @@ public class Player extends Entity{
 		inAir = false;
 		attacking = false;
 		moving = false;
+		jump = false;
 		playerAction = IDLE;
 		currentHealth = maxHealth;
 		hitbox.x = x;
