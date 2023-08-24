@@ -1,7 +1,14 @@
 package utilz;
 
-import java.awt.geom.Rectangle2D;
+import static utilz.Constants.EnemyConstants.CRABBY;
 
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import entities.Crabby;
 import main.Game;
 
 public class HelpMethods {
@@ -139,6 +146,77 @@ public class HelpMethods {
 			return IsAllTilesWalkable(firstXTile, secondXTile, yTile, lvlData);	
 
 	}
+	
+	public static int[][] GetLevelData(BufferedImage img){
+			
+			
+			// level data is now the same size as the level image
+			int[][] lvlData = new int[img.getHeight()][img.getWidth()]; // [ROWS][COLUMNS]
+			
+			// get height and width of the atlas in pixels
+			for(int j = 0; j < img.getHeight(); j++) { 
+				for(int i = 0; i < img.getWidth(); i++) {
+					// how does getRGB(i, j) get the pixel at the correct sprite index in the atlas???
+					Color color = new Color(img.getRGB(i, j)); 
+					int value = color.getRed();
+					// we only have 48 sprites so can't have index >= 48
+					if(value >= 48) {
+						value = 0;
+					}
+					
+					lvlData[j][i] = value;
+				}
+			}
+						
+			// the red value of of the sprite is going to be the index for that sprite
+			// if the red value is 3, it's going to be index 3 in the sprite array
+			
+			// what's happening here makes no sense, he iterates through every pixel in the atlas 
+			// but somehow only gets 48 unique values for the 48 tiles in the game window?
+			// how are j and i being used to iterate through pixels but also don't exceed the bounds
+			// of the lvlData array which is only 4 rows 12 columns???
+			
+			// wait it actually makes sense, i think the level data is organized into 4x12 pixel PNG's 
+			// so the data is encoded into it		
+	
+			return lvlData;
+		}
+	
+	
+	// using the green color of the RGB values encoded into the level data to spawn enemies
+		public static ArrayList<Crabby> GetCrabs(BufferedImage img){
+			
+			ArrayList<Crabby> list = new ArrayList<>();
+			
+			for(int j = 0; j < img.getHeight(); j++)  
+				for(int i = 0; i < img.getWidth(); i++) {
+					Color color = new Color(img.getRGB(i, j)); 
+					int value = color.getGreen();
+					
+					// if the green value == CRABBY (which is 0)
+					// put a Crab at this location in the level and store that location data in the Crab array
+					if(value == CRABBY) 
+						list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
+				}
+			
+			return list;
+		}
+		
+		
+		public static Point GetPlayerSpawn(BufferedImage img) {
+			for(int j = 0; j < img.getHeight(); j++)  
+				for(int i = 0; i < img.getWidth(); i++) {
+					Color color = new Color(img.getRGB(i, j)); 
+					int value = color.getGreen();
+					// spawn the player at the point in the level data where the green value is 100
+					if(value == 100) 
+						return new Point(i * Game.TILES_SIZE, j * Game.TILES_SIZE);
+				}
+			
+			return new Point(1 * Game.TILES_SIZE, 1 * Game.TILES_SIZE);
+		}
+	
+		
 	
 	
 	
