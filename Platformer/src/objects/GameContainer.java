@@ -25,6 +25,10 @@ public class GameContainer extends GameObject{
 			yDrawOffset = (int) (5 * Game.SCALE);
 		}
 		
+		// add game scale * 2 because there's two pixel difference between sprite height and tile size
+		hitbox.y += yDrawOffset + (int)(Game.SCALE * 2);
+		hitbox.x += xDrawOffset / 2;
+		
 	}
 	
 	public void update() {

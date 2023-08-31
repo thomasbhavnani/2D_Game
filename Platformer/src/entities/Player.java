@@ -62,12 +62,14 @@ public class Player extends Entity{
 	private boolean attackChecked;
 	private Playing playing;
 	
+	private int tileY = 0;
+	
 	public Player(float x, float y, int width, int height, Playing playing) {
 		super(x, y, width, height);
 		this.playing = playing;
 		this.state = IDLE;
 		this.maxHealth = 100;
-		this.currentHealth = maxHealth;
+		this.currentHealth = 35;
 		this.walkSpeed = 1.0f * Game.SCALE;
 		loadAnimations();
 		initHitbox(20, 27);
@@ -95,6 +97,12 @@ public class Player extends Entity{
 			
 		updateAttackBox();
 		updatePos();
+		if(moving) {
+			checkPotionTouched();
+			checkSpikesTouched();
+			tileY = (int) (hitbox.y / Game.TILES_SIZE);
+		}
+			
 		if(attacking)
 			checkAttack();
 		updateAnimationTick();
@@ -102,12 +110,23 @@ public class Player extends Entity{
 		
 	}
 	
+	private void checkSpikesTouched() {
+		playing.checkSpikesTouched(this);
+		
+	}
+
+	private void checkPotionTouched() {
+		playing.checkPotionTouched(hitbox);
+		
+	}
+
 	private void checkAttack() {
 		//attack activates at frame 2 of the player attack animation
 		if(attackChecked || aniIndex != 1)
 			return;
 		attackChecked = true;
 		playing.checkEnemyHit(attackBox);
+		playing.checkObjectHit(attackBox);
 			
 		
 	}
@@ -304,6 +323,15 @@ public class Player extends Entity{
 		} else if(currentHealth >= maxHealth)
 			currentHealth = maxHealth;
 	}
+	
+	public void kill() {
+		currentHealth = 0;
+	}
+	
+	public void changePower(int bluePotionValue) {
+		System.out.println("added power");
+		
+	}
 
 	private void loadAnimations() {
 		// slash in front of image name tells pc that image is in a folder, not beside one
@@ -371,6 +399,14 @@ public class Player extends Entity{
 		if(!IsEntityOnFloor(hitbox, lvlData)) 
 			inAir = true;
 	}
+
+	public int getTileY() {
+		return tileY;
+	}
+
+
+
+
 	
 	
 

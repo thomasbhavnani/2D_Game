@@ -1,6 +1,7 @@
 package utilz;
 
 import static utilz.Constants.EnemyConstants.CRABBY;
+import static utilz.Constants.ObjectConstants.*;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -10,6 +11,10 @@ import java.util.ArrayList;
 
 import entities.Crabby;
 import main.Game;
+import objects.Cannon;
+import objects.GameContainer;
+import objects.Potion;
+import objects.Spike;
 
 public class HelpMethods {
 	
@@ -114,17 +119,39 @@ public class HelpMethods {
 			return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
 	}
 	
-	// check if all the tiles between start and end along a horizontal line are solid tiles
-	public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
-		for (int i = 0; i < xEnd - xStart; i++) {
-			// check the tiles between the enemy and the player
+	
+	public static boolean CanCannonSeePlayer(int[][] lvlData, Rectangle2D.Float firstHitbox, 
+			Rectangle2D.Float secondHitbox, int yTile) {
+		
+		int firstXTile = (int) (firstHitbox.x / Game.TILES_SIZE);
+		int secondXTile = (int) (secondHitbox.x / Game.TILES_SIZE);
+		
+		
+		// checking if there is a solid tile between the two hitboxes
+		if(firstXTile > secondXTile) 
+			// start from the larger x location
+			return IsAllTilesClear(secondXTile, firstXTile, yTile, lvlData);
+		 else 
+			return IsAllTilesClear(firstXTile, secondXTile, yTile, lvlData);	
+
+	}
+	
+	public static boolean IsAllTilesClear(int xStart, int xEnd, int y, int[][] lvlData) {
+		// check the tiles between two points
+		for (int i = 0; i < xEnd - xStart; i++)
 			if (IsTileSolid(xStart + i, y, lvlData))
 				return false;
-			
+		return true;
+	}
+	
+	// check if all the tiles between start and end along a horizontal line are solid tiles
+	public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
+		if(IsAllTilesClear(xStart, xEnd, y, lvlData))
+			for (int i = 0; i < xEnd - xStart; i++) {
+				if (!IsTileSolid(xStart + i, y + 1, lvlData))
+					return false;
 			// check the if the tile underneath the tile being checked is not solid,
-			// if it is not solid then it is a pit and the enemy cannot move there
-			if (!IsTileSolid(xStart + i, y + 1, lvlData))
-				return false;
+			// if it is not solid then it is a pit and an enemy cannot move there
 		}
 
 		return true;
@@ -215,6 +242,71 @@ public class HelpMethods {
 			
 			return new Point(1 * Game.TILES_SIZE, 1 * Game.TILES_SIZE);
 		}
+		
+		public static ArrayList<Potion> GetPotions(BufferedImage img){
+			
+			ArrayList<Potion> list = new ArrayList<>();
+			
+			for(int j = 0; j < img.getHeight(); j++)  
+				for(int i = 0; i < img.getWidth(); i++) {
+					Color color = new Color(img.getRGB(i, j)); 
+					int value = color.getBlue();
+					if(value == RED_POTION || value == BLUE_POTION) 
+						list.add(new Potion(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+					
+				}
+			
+			return list;
+		}
+		public static ArrayList<GameContainer> GetContainers(BufferedImage img){
+			
+			ArrayList<GameContainer> list = new ArrayList<>();
+			
+			for(int j = 0; j < img.getHeight(); j++)  
+				for(int i = 0; i < img.getWidth(); i++) {
+					Color color = new Color(img.getRGB(i, j)); 
+					int value = color.getBlue();
+					if(value == BOX || value == BARREL) 
+						list.add(new GameContainer(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+					
+				}
+			
+			return list;
+		}
+
+		public static ArrayList<Spike> GetSpikes(BufferedImage img) {
+			
+			ArrayList<Spike> list = new ArrayList<>();
+			
+			for(int j = 0; j < img.getHeight(); j++)  
+				for(int i = 0; i < img.getWidth(); i++) {
+					Color color = new Color(img.getRGB(i, j)); 
+					int value = color.getBlue();
+					if(value == SPIKE) 
+						list.add(new Spike(i * Game.TILES_SIZE, j * Game.TILES_SIZE, SPIKE));
+					
+				}
+			
+			return list;
+		}
+		
+		public static ArrayList<Cannon> GetCannons(BufferedImage img) {
+			
+			ArrayList<Cannon> list = new ArrayList<>();
+			
+			for(int j = 0; j < img.getHeight(); j++)  
+				for(int i = 0; i < img.getWidth(); i++) {
+					Color color = new Color(img.getRGB(i, j)); 
+					int value = color.getBlue();
+					if(value == CANNON_LEFT || value == CANNON_RIGHT) 
+						list.add(new Cannon(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+					
+				}
+			
+			return list;
+		}
+		
+		
 	
 		
 	
