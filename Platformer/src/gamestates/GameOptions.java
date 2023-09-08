@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import main.Game;
 import ui.AudioOptions;
+import ui.PauseButton;
 import ui.UrmButton;
 import utilz.LoadSave;
 import static utilz.Constants.UI.URMButtons.*;
@@ -47,7 +48,7 @@ public class GameOptions extends State implements Statemethods{
 	public void update() {
 		menuB.update();
 		audioOptions.update();
-		//ENDED HERE ON EPISODE 24 AT 18:50 
+		
 	}
 
 	@Override
@@ -59,33 +60,45 @@ public class GameOptions extends State implements Statemethods{
 		audioOptions.draw(g);
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void mouseDragged(MouseEvent e) {
+		audioOptions.mouseDragged(e);
 	}
+
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		if(isIn(e, menuB)) {
+			menuB.setMousePressed(true);
+		} else 
+			audioOptions.mousePressed(e);
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		if(isIn(e, menuB)) {
+			if(menuB.isMousePressed())
+				Gamestate.state = Gamestate.MENU;
+		} else 
+			audioOptions.mouseReleased(e);
 		
+		menuB.resetBools();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
+		menuB.setMouseOver(false);
 		
+		if(isIn(e, menuB))
+			menuB.setMouseOver(true);
+		else
+			audioOptions.mouseMoved(e);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			Gamestate.state = Gamestate.MENU;
 		
 	}
 
@@ -95,4 +108,14 @@ public class GameOptions extends State implements Statemethods{
 		
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub	
+		
+	}
+	
+	private boolean isIn(MouseEvent e, PauseButton b) {
+		// if the mouse is inside the bounds of the button
+		return b.getBounds().contains(e.getX(), e.getY());
+	}
 }

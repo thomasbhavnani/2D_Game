@@ -14,8 +14,10 @@ public class AudioOptions {
 	
 	private VolumeButton volumeButton;
 	private SoundButton musicButton, sfxButton;
+	private Game game;
 	
-	public AudioOptions() {
+	public AudioOptions(Game game) {
+		this.game = game;
 		createSoundButtons();
 		creatVolumeButton();
 	}
@@ -55,7 +57,11 @@ public class AudioOptions {
 		// for volume slider
 		// should still work even if you move outside the slider as long as you clicked inside it initially
 		if(volumeButton.isMousePressed()) {
+			float valueBefore = volumeButton.getFloatValue();
 			volumeButton.changeX(e.getX());
+			float valueAfter = volumeButton.getFloatValue();
+			if(valueBefore != valueAfter)
+				game.getAudioPlayer().setVolume(valueAfter);
 		}
 	}
 	
@@ -70,12 +76,16 @@ public class AudioOptions {
 
 	public void mouseReleased(MouseEvent e) {
 		if(isIn(e, musicButton)) {
-			if(musicButton.isMousePressed()) 
+			if(musicButton.isMousePressed()) {
 				musicButton.setMuted(!musicButton.isMuted()); 
+				game.getAudioPlayer().toggleSongMute();
+			}
 				// using !musicButton.isMuted() because you want to change muted/unmuted
-		}else if (isIn(e, sfxButton)) {
-			if(sfxButton.isMousePressed())
+		} else if (isIn(e, sfxButton)) {
+			if(sfxButton.isMousePressed()) {
 				sfxButton.setMuted(!sfxButton.isMuted());
+				game.getAudioPlayer().toggleEffectMute();
+			}
 		} 
 		
 		musicButton.resetBools();
